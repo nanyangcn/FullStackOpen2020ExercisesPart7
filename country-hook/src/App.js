@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Country from './components/Country'
+import axios from 'axios'
 
 const useField = (type) => {
   const [value, setValue] = useState('')
@@ -17,8 +18,23 @@ const useField = (type) => {
 
 const useCountry = (name) => {
   const [country, setCountry] = useState(null)
-
-  useEffect()
+  useEffect(() => {
+    if (name !== '') {
+      const baseUrl = `https://restcountries.eu/rest/v2/name/${name}?fullText=true`
+      axios
+        .get(baseUrl)
+        .then((response) => {
+          const countryReceived = {}
+          countryReceived.found = true
+          countryReceived.data = response.data[0]
+          setCountry(countryReceived)
+        })
+        .catch(() => {
+          const countryReceived = { found: false }
+          setCountry(countryReceived)
+        })
+    }
+  }, [name])
 
   return country
 }
