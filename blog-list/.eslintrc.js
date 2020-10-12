@@ -18,7 +18,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['react', 'jest', 'cypress', 'react-hooks', 'security'],
+  plugins: ['react', 'jest', 'cypress', 'react-hooks', 'security', 'formik'],
   rules: {
     indent: ['error', 2],
     'linebreak-style': ['error', 'unix'],

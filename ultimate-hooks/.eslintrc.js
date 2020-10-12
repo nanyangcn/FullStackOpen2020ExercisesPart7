@@ -9,6 +9,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:react/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:security/recommended',
   ],
   parserOptions: {
     ecmaFeatures: {
@@ -17,7 +18,7 @@ module.exports = {
     ecmaVersion: 2018,
     sourceType: 'module',
   },
-  plugins: ['react', 'jest', 'cypress', 'react-hooks'],
+  plugins: ['react', 'jest', 'cypress', 'react-hooks', 'security'],
   rules: {
     indent: ['error', 2],
     'linebreak-style': ['error', 'unix'],
