@@ -19,6 +19,8 @@ import {
 const App = () => {
   const dispatch = useDispatch()
 
+  const user = useSelector((state) => state.user)
+
   useEffect(() => {
     dispatch(initialBlogs())
   }, [dispatch])
@@ -29,20 +31,20 @@ const App = () => {
 
   const createBlogRef = useRef()
 
-  const handleCreateBlog = async (blog) => {
+  const handleCreateBlog = (blog) => {
     createBlogRef.current.toggleVisibility()
-    dispatch(createBlogAction(blog))
+    dispatch(createBlogAction(blog, user))
   }
 
-  const handleLikeClick = async (blog) => {
+  const handleLikeClick = (blog) => {
     dispatch(likeBlogAction(blog))
   }
 
-  const handleRemoveClick = async (blog) => {
+  const handleRemoveClick = (blog) => {
     dispatch(removeBlogAction(blog))
   }
 
-  const handleLogin = async (userLoggedIn) => {
+  const handleLogin = (userLoggedIn) => {
     dispatch(loginAction(userLoggedIn))
   }
 
@@ -50,13 +52,10 @@ const App = () => {
     dispatch(logoutAction())
   }
 
-  const user = useSelector((state) => state.user)
-
   return (
     <div>
       <h1>Blog list</h1>
-      {/* <Notification className='error' notification={error} />
-      <Notification className='notification' notification={notification} /> */}
+      <Notification />
       {user === null && <LoginForm handleLogin={handleLogin} />}
       {user !== null && (
         <BlogForm

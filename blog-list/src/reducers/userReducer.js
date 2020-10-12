@@ -1,5 +1,6 @@
 import blogService from '../services/blogs'
 import loginService from '../services/login'
+import { setErrorAction } from './notificationReducer'
 
 const reducer = (state = null, action) => {
   switch (action.type) {
@@ -27,8 +28,7 @@ export const loginAction = (userLoggedIn) => {
         data: user,
       })
     } catch (error) {
-      // setError(error.response.data.error)
-      // setTimeout(() => setError(null), 5000)
+      dispatch(setErrorAction(error.response.data.error, 5))
     }
   }
 }

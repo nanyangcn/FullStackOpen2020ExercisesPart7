@@ -1,13 +1,27 @@
 let timeoutId = null
+const initialNotification = {
+  message: null,
+  type: 'message',
+}
 
-const reducer = (state = null, action) => {
+const reducer = (state = initialNotification, action) => {
   switch (action.type) {
-    case 'SET_NOTIFICATION': {
-      const newState = action.data
+    case 'MESSAGE': {
+      const newState = {
+        message: action.data,
+        type: 'message',
+      }
+      return newState
+    }
+    case 'ERROR': {
+      const newState = {
+        message: action.data,
+        type: 'error',
+      }
       return newState
     }
     case 'RESET': {
-      return null
+      return initialNotification
     }
     default: {
       return state
@@ -15,11 +29,22 @@ const reducer = (state = null, action) => {
   }
 }
 
-export const setNotification = (message, sec) => {
+export const setMessageAction = (message, sec) => {
   return async (dispatch) => {
     clearTimeout(timeoutId)
     dispatch({
-      type: 'SET_NOTIFICATION',
+      type: 'MESSAGE',
+      data: message,
+    })
+    timeoutId = setTimeout(() => dispatch({ type: 'RESET' }), 1000 * sec)
+  }
+}
+
+export const setErrorAction = (message, sec) => {
+  return async (dispatch) => {
+    clearTimeout(timeoutId)
+    dispatch({
+      type: 'ERROR',
       data: message,
     })
     timeoutId = setTimeout(() => dispatch({ type: 'RESET' }), 1000 * sec)

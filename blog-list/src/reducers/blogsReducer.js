@@ -1,5 +1,7 @@
 import blogService from '../services/blogs'
 
+import { setMessageAction, setErrorAction } from './notificationReducer'
+
 const reducer = (state = [], action) => {
   switch (action.type) {
     case 'CREATE': {
@@ -13,7 +15,7 @@ const reducer = (state = [], action) => {
       return newState
     }
     case 'REMOVE': {
-      const newState = state.blogs.filter((blog) => blog.id !== action.data.id)
+      const newState = state.filter((blog) => blog.id !== action.data.id)
       return newState
     }
     case 'INITIALIZE_BLOG': {
@@ -26,19 +28,21 @@ const reducer = (state = [], action) => {
   }
 }
 
-export const createBlogAction = (blog) => {
+export const createBlogAction = (blog, user) => {
   return async (dispatch) => {
     try {
       const response = await blogService.create(blog)
+      response.user = {}
+      response.user.username = user.username
       dispatch({
         type: 'CREATE',
         data: response,
       })
-      // setNotification(`a blog ${blog.title} by ${blog.author} added`)
-      // setTimeout(() => setNotification(null), 5000)
+      dispatch(
+        setMessageAction(`a blog ${blog.title} by ${blog.author} added`, 5)
+      )
     } catch (error) {
-      // setError(error.response.data.error)
-      // setTimeout(() => setError(null), 5000)
+      dispatch(setErrorAction(error.response.data.error, 5))
     }
   }
 }
@@ -54,8 +58,7 @@ export const likeBlogAction = (blog) => {
         data: newBlog,
       })
     } catch (error) {
-      // setError(error.response.data.error)
-      // setTimeout(() => setError(null), 5000)
+      dispatch(setErrorAction(error.response.data.error, 5))
     }
   }
 }
@@ -70,11 +73,9 @@ export const removeBlogAction = (blog) => {
           type: 'REMOVE',
           data: blog,
         })
-        // setNotification('blog deleted')
-        // setTimeout(() => setNotification(null), 5000)
+        dispatch(setMessageAction('blog deleted', 5))
       } catch (error) {
-        // setError(error.response.data.error)
-        // setTimeout(() => setError(null), 5000)
+        dispatch(setErrorAction(error.response.data.error, 5))
       }
     }
   }
