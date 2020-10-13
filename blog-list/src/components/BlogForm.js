@@ -1,18 +1,20 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 import CreateBlogForm from './CreateBlogForm'
 import Toggle from './Toggle'
-import Blog from './Blog'
 
-const BlogForm = ({
-  handleLogout,
-  handleCreateBlog,
-  handleLikeClick,
-  handleRemoveClick,
-  createBlogRef,
-}) => {
-  const user = useSelector((state) => state.user)
+const BlogForm = ({ handleLogout, handleCreateBlog, createBlogRef }) => {
+  const blogStyle = {
+    paddingTop: 10,
+    paddingLeft: 2,
+    border: 'solid',
+    borderWidth: 1,
+    marginBottom: 5,
+  }
+
+  const loggedUser = useSelector((state) => state.loggedUser)
   const blogs = useSelector((state) => state.blogs)
 
   const sortedBlogs = blogs.map((blog) => blog)
@@ -21,7 +23,7 @@ const BlogForm = ({
   return (
     <div>
       <h2>blogs</h2>
-      {user.name} logged in
+      {loggedUser.name} logged in
       <button id='logoutButton' onClick={handleLogout}>
         log out
       </button>
@@ -29,13 +31,11 @@ const BlogForm = ({
         <CreateBlogForm handleCreateBlog={handleCreateBlog} />
       </Toggle>
       {sortedBlogs.map((blog) => (
-        <Blog
-          key={blog.id}
-          user={user}
-          blog={blog}
-          handleLikeClick={handleLikeClick}
-          handleRemoveClick={handleRemoveClick}
-        />
+        <div key={blog.id} style={blogStyle}>
+          <Link to={`/blogs/${blog.id}`}>
+            {blog.title} {blog.author}
+          </Link>
+        </div>
       ))}
     </div>
   )

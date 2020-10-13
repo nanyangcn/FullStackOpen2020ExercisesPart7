@@ -1,58 +1,39 @@
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 
-const Blog = ({ user, blog, handleLikeClick, handleRemoveClick }) => {
-  const [view, setView] = useState('view')
-
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5,
-  }
-
-  const handleViewClick = () => {
-    if (view === 'view') {
-      setView('hide')
-    } else {
-      setView('view')
-    }
-  }
-
-  if (blog !== null) {
+const Blog = ({ loggedUser, blog, handleLikeClick, handleRemoveClick }) => {
+  if (blog && loggedUser) {
     const removeButtonStyle = {
       backgroundColor: '#3D75FF',
       borderRadius: '4px',
-      display: user.username === blog.user.username ? '' : 'none',
+      display: loggedUser.username === blog.user.username ? '' : 'none',
     }
 
     return (
-      <div style={blogStyle} className='blog'>
+      <div className='blog'>
         <div>
-          {blog.title} {blog.author}
-          <button id='viewButton' onClick={handleViewClick}>
-            {view}
+          <h2>
+            {blog.title} {blog.author}
+          </h2>
+          <a href={blog.url}>{blog.url}</a>
+        </div>
+        <div>
+          <span className='likes'>{blog.likes} likes</span>
+          <button id='likeButton' onClick={() => handleLikeClick(blog)}>
+            like
           </button>
         </div>
-        <div style={{ display: view === 'view' ? 'none' : '' }}>
-          <p>
-            Url: <a href={blog.url}>{blog.url}</a>
-          </p>
-          <p>
-            Likes: <span className='likes'>{blog.likes}</span>
-            <button id='likeButton' onClick={() => handleLikeClick(blog)}>
-              like
-            </button>
-          </p>
-          <p>Creator: {blog.user.username}</p>
-          <button
-            id='removeButton'
-            style={removeButtonStyle}
-            onClick={() => handleRemoveClick(blog)}
-          >
-            remove
-          </button>
+        <div>added by {blog.user.username}</div>
+        <button
+          id='removeButton'
+          style={removeButtonStyle}
+          onClick={() => handleRemoveClick(blog)}
+        >
+          remove
+        </button>
+        <div>
+          <h3>comments</h3>
+          <ul></ul>
         </div>
       </div>
     )
@@ -61,8 +42,8 @@ const Blog = ({ user, blog, handleLikeClick, handleRemoveClick }) => {
 }
 
 Blog.propTypes = {
-  user: PropTypes.object.isRequired,
-  blog: PropTypes.object.isRequired,
+  loggedUser: PropTypes.object,
+  blog: PropTypes.object,
   handleLikeClick: PropTypes.func.isRequired,
   handleRemoveClick: PropTypes.func.isRequired,
 }

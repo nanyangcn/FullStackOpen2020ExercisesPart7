@@ -28,12 +28,12 @@ const reducer = (state = [], action) => {
   }
 }
 
-export const createBlogAction = (blog, user) => {
+export const createBlogAction = (blog, loggedUser) => {
   return async (dispatch) => {
     try {
       const response = await blogService.create(blog)
       response.user = {}
-      response.user.username = user.username
+      response.user.username = loggedUser.username
       dispatch({
         type: 'CREATE',
         data: response,
