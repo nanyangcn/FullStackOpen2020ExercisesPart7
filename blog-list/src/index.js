@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router } from 'react-router-dom'
 
+import Container from '@material-ui/core/Container'
+
 import App from './App'
 import store from './store'
 import './App.css'
@@ -10,7 +12,9 @@ import './App.css'
 ReactDOM.render(
   <Router>
     <Provider store={store}>
-      <App />
+      <Container maxWidth='lg'>
+        <App />
+      </Container>
     </Provider>
   </Router>,
   document.getElementById('root')

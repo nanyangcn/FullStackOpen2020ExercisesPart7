@@ -15,6 +15,7 @@ import {
   createBlogAction,
   likeBlogAction,
   removeBlogAction,
+  createCommentAction,
 } from './reducers/blogsReducer'
 import {
   initializeLoggedUser,
@@ -33,7 +34,7 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initialBlogs())
-  }, [dispatch])
+  }, [dispatch, loggedUser])
 
   useEffect(() => {
     dispatch(initializeLoggedUser())
@@ -41,13 +42,12 @@ const App = () => {
 
   useEffect(() => {
     dispatch(initializeUsersAction())
-  }, [dispatch])
+  }, [dispatch, blogs])
 
   const createBlogRef = useRef()
 
   const handleCreateBlog = (blog) => {
     createBlogRef.current.toggleVisibility()
-    // TODO: update user.blogs
     dispatch(createBlogAction(blog, loggedUser))
   }
 
@@ -56,8 +56,8 @@ const App = () => {
   }
 
   const handleRemoveClick = (blog) => {
-    // TODO: update users.blogs
     dispatch(removeBlogAction(blog))
+    history.push('/')
   }
 
   const handleLogin = (userLoggedIn) => {
@@ -65,8 +65,12 @@ const App = () => {
   }
 
   const handleLogout = () => {
-    history.push('/')
     dispatch(logoutAction())
+    history.push('/')
+  }
+
+  const handleCreateComment = (blog, comment) => {
+    dispatch(createCommentAction(blog, comment, loggedUser))
   }
 
   let match = useRouteMatch('/users/:id')
@@ -74,10 +78,18 @@ const App = () => {
   match = useRouteMatch('/blogs/:id')
   const blog = match ? blogs.find((blog) => blog.id === match.params.id) : null
 
+  if (!loggedUser) {
+    return (
+      <div>
+        <Notification />
+        <LoginForm handleLogin={handleLogin} />
+      </div>
+    )
+  }
+
   return (
     <div>
-      {loggedUser !== null && <Menu handleLogout={handleLogout} />}
-      <h1>blog app</h1>
+      <Menu handleLogout={handleLogout} />
       <Notification />
       <Switch>
         <Route path='/users/:id'>
@@ -92,19 +104,16 @@ const App = () => {
             blog={blog}
             handleLikeClick={handleLikeClick}
             handleRemoveClick={handleRemoveClick}
+            handleCreateComment={handleCreateComment}
           />
         </Route>
         <Route path='/'>
-          {loggedUser === null && <LoginForm handleLogin={handleLogin} />}
-          {loggedUser !== null && (
-            <BlogForm
-              handleLogout={handleLogout}
-              handleCreateBlog={handleCreateBlog}
-              handleLikeClick={handleLikeClick}
-              handleRemoveClick={handleRemoveClick}
-              createBlogRef={createBlogRef}
-            />
-          )}
+          <BlogForm
+            handleCreateBlog={handleCreateBlog}
+            handleLikeClick={handleLikeClick}
+            handleRemoveClick={handleRemoveClick}
+            createBlogRef={createBlogRef}
+          />
         </Route>
       </Switch>
     </div>

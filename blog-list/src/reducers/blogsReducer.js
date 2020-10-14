@@ -22,8 +22,31 @@ const reducer = (state = [], action) => {
       const newState = [...action.data]
       return newState
     }
+    case 'CREATE_COMMENT': {
+      const newState = state.map((blog) =>
+        blog.id === action.data.id ? action.data : blog
+      )
+      return newState
+    }
     default: {
       return state
+    }
+  }
+}
+
+export const createCommentAction = (blog, comment, loggedUser) => {
+  return async (dispatch) => {
+    try {
+      const response = await blogService.createComment(blog.id, comment)
+      response.user = {}
+      response.user.username = loggedUser.username
+      dispatch({
+        type: 'CREATE_COMMENT',
+        data: response,
+      })
+      dispatch(setMessageAction(`new comment added`, 5))
+    } catch (error) {
+      dispatch(setErrorAction(error.response.data.error, 5))
     }
   }
 }

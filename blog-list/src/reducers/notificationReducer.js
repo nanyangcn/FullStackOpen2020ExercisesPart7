@@ -9,7 +9,7 @@ const reducer = (state = initialNotification, action) => {
     case 'MESSAGE': {
       const newState = {
         message: action.data,
-        type: 'message',
+        type: 'success',
       }
       return newState
     }

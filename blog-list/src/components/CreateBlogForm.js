@@ -1,6 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Formik, Form, Field } from 'formik'
+import { TextField } from 'formik-material-ui'
+
+import Button from '@material-ui/core/Button'
+import CloudUploadIcon from '@material-ui/icons/CloudUpload'
 
 const CreateBlogForm = ({ handleCreateBlog }) => {
   return (
@@ -15,20 +19,47 @@ const CreateBlogForm = ({ handleCreateBlog }) => {
         {({ isSubmitting }) => (
           <Form>
             <div>
-              <label htmlFor='title'>title:</label>
-              <Field type='text' name='title' id='inputTitle' />
+              <Field
+                component={TextField}
+                label='title'
+                variant='filled'
+                type='text'
+                name='title'
+                id='inputTitle'
+                fullWidth
+              />
             </div>
             <div>
-              <label htmlFor='author'>author:</label>
-              <Field type='text' name='author' id='inputAuthor' />
+              <Field
+                component={TextField}
+                label='author'
+                variant='filled'
+                type='text'
+                name='author'
+                id='inputAuthor'
+              />
             </div>
             <div>
-              <label htmlFor='url'>url:</label>
-              <Field type='text' name='url' id='inputUrl' />
+              <Field
+                component={TextField}
+                label='url'
+                variant='filled'
+                type='text'
+                name='url'
+                id='inputUrl'
+                fullWidth
+              />
             </div>
-            <button id='createButton' type='submit' disabled={isSubmitting}>
+            <Button
+              variant='contained'
+              color='primary'
+              startIcon={<CloudUploadIcon />}
+              id='createButton'
+              type='submit'
+              disabled={isSubmitting}
+            >
               create
-            </button>
+            </Button>
           </Form>
         )}
       </Formik>
